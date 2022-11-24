@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.31.0",
-    "@iconify-json/carbon": "^1.1.11",
+    "@iconify/vue": "^4.0.0",
     "@types/node": "^18.11.9",
     "@unocss/reset": "^0.46.5",
     "@vitejs/plugin-vue": "^3.2.0",
@@ -36,6 +36,10 @@
     "vue-tsc": "^1.0.9"
   },
   "eslintConfig": {
-    "extends": "@antfu"
+    "extends": [
+      "plugin:vue/essential",
+      "plugin:prettier/recommended",
+      "eslint:recommended"
+    ]
   }
 }
