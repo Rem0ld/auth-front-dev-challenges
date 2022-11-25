@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import {Icon} from "@iconify/vue"
+import { Icon } from "@iconify/vue";
+
 withDefaults(
   defineProps<{
     placeholder: string;
     type?: "text" | "password";
     icon?: string;
+    name: string;
   }>(),
   {
     type: "text",
     icon: "",
   }
 );
-onUpdated(() => {
-console.log((isDark.value))
 
-})
 </script>
 
 <template>
@@ -26,6 +25,7 @@ console.log((isDark.value))
       w="full"
       outline-none
       class="dark:bg-hex-121212"
+      @input="(e: any) => $emit('changeInput', name, e.target.value)"
     />
   </div>
 </template>

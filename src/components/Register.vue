@@ -1,9 +1,23 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { socialsConnect } from "~/constants";
 const emit = defineEmits(["changeForm"]);
 
+const inputs = ref<{ email: string; password: string }>({
+  email: "",
+  password: "",
+});
+
 const change = () => {
   emit("changeForm");
+};
+
+const changeInput = (inputName: "email" | "password", value: string) => {
+  inputs.value[inputName] = value;
+};
+
+const onSubmit = () => {
+  console.log(inputs.value.email, inputs.value.password);
 };
 </script>
 
@@ -18,10 +32,22 @@ const change = () => {
         paths for you to choose.
       </p>
     </div>
-    <form class="flex flex-col gap-3">
-      <Input type="text" placeholder="Email" icon="material-symbols:mail" />
-      <Input type="password" placeholder="Password" icon="material-symbols:lock" />
-      <Button text="Start coding now" />
+    <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
+      <Input
+        @change-input="changeInput"
+        type="text"
+        name="email"
+        placeholder="Email"
+        icon="material-symbols:mail"
+      />
+      <Input
+        @change-input="changeInput"
+        type="password"
+        name="password"
+        placeholder="Password"
+        icon="material-symbols:lock"
+      />
+      <Button type="submit" text="Start coding now" />
     </form>
     <div class="flex flex-col gap-y-6">
       <span class="text-sm text-gray-400"
