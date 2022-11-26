@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { socialsConnect } from "~/constants";
+import AuthApi from "~/api/Auth.api";
+import { socialsConnect, regexes } from "~/constants";
 const emit = defineEmits(["changeForm"]);
 
 const inputs = ref<{ email: string; password: string }>({
@@ -16,8 +17,13 @@ const changeInput = (inputName: "email" | "password", value: string) => {
   inputs.value[inputName] = value;
 };
 
-const onSubmit = () => {
+const onSubmit = async () => {
   console.log(inputs.value.email, inputs.value.password);
+  const result = await AuthApi.register({
+    email: inputs.value.email,
+    password: inputs.value.password
+  })
+  console.log(result)
 };
 </script>
 
@@ -35,10 +41,12 @@ const onSubmit = () => {
     <form class="flex flex-col gap-3" @submit.prevent="onSubmit">
       <Input
         @change-input="changeInput"
-        type="text"
+        type="email"
         name="email"
+        :pattern="regexes.email"
         placeholder="Email"
         icon="material-symbols:mail"
+        title="Please enter a valid email"
       />
       <Input
         @change-input="changeInput"
@@ -46,6 +54,7 @@ const onSubmit = () => {
         name="password"
         placeholder="Password"
         icon="material-symbols:lock"
+        title="Password must contain at least min 8 characters, 1 lowercase, 1 uppercase, 1 special character and 1 digit"
       />
       <Button type="submit" text="Start coding now" />
     </form>

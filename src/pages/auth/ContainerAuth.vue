@@ -45,8 +45,13 @@ const changeForm = () => {
           alt="logo devChallenges"
         />
         <button icon-btn @click="toggleDark()">
-
-          <Icon v-if="!isDark" icon="carbon:moon" text="gray-500" w="24px" h="24px" />
+          <Icon
+            v-if="!isDark"
+            icon="carbon:moon"
+            text="gray-500"
+            w="24px"
+            h="24px"
+          />
           <Icon v-else icon="carbon:sun" text="white" w="24px" h="24px" />
         </button>
       </div>
