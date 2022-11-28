@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { capFirstLetter } from "../utils/stringManipulation";
 
 withDefaults(
   defineProps<{
@@ -7,20 +8,27 @@ withDefaults(
     type?: "email" | "text" | "password";
     icon?: string;
     name: string;
-    pattern?: string
-    title?: string
-    error?: string
+    pattern?: string;
+    title?: string;
+    error?: string;
   }>(),
   {
     type: "text",
     icon: "",
   }
 );
-
 </script>
 
 <template>
-  <div border="1 gray-400" rounded="8px" py="4" px="3" class="container-input flex gap-3">
+  <div
+    :class="error ? 'border-red-500' : 'border-gray-400'"
+    border
+    rounded="8px"
+    py="4"
+    px="3"
+    flex
+    gap="3"
+  >
     <Icon :icon="icon" color="gray" w="24px" h="24px" />
     <input
       :type="type"
@@ -34,4 +42,17 @@ withDefaults(
       @input="(e: any) => $emit('changeInput', name, e.target.value)"
     />
   </div>
+  <Transition>
+    <div
+      v-if="error"
+      grid
+      place-items-center
+      bg="red-100"
+      rounded="5px"
+      mt="-3"
+      min-h="40px"
+    >
+      <span text="red-500">{{ capFirstLetter(error) }}</span>
+    </div>
+  </Transition>
 </template>

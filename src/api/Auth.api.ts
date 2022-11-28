@@ -32,12 +32,22 @@ class AuthApi {
         headers: this.headers,
         body: JSON.stringify(data),
       });
-      const result = await response.json();
-
-      return result;
-    } catch (error) {
-      console.error(error);
-      throw new Error(error as string);
+      if (!response.ok) {
+        throw new Error(await response.json());
+      }
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      if (error.message.includes("already exists")) {
+        throw { email: error.message };
+      }
+      if (error.message.includes("fails to match")) {
+        throw {
+          password:
+            "Password must contain at least min 8 characters, 1 lowercase, 1 uppercase, 1 special character and 1 digit",
+        };
+      }
+      throw error;
     }
   }
 

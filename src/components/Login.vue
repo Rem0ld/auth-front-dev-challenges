@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { socialsConnect } from "~/constants";
+import AuthApi from "~/api/Auth.api";
+import { regexes, socialsConnect } from "~/constants";
 const emit = defineEmits(["changeForm"]);
+const router = useRouter();
 
 const inputs = ref<{ email: string; password: string }>({
+  email: "",
+  password: "",
+});
+
+const errors = ref<ErrorRegister>({
   email: "",
   password: "",
 });
@@ -15,8 +22,20 @@ const changeInput = (inputName: "email" | "password", value: string) => {
   inputs.value[inputName] = value;
 };
 
-const onSubmit = () => {
-  console.log(inputs.value.email, inputs.value.password);
+const onSubmit = async () => {
+  try {
+    const result: { id: string } = await AuthApi.login({
+      email: inputs.value.email,
+      password: inputs.value.password,
+    });
+    console.log(result);
+
+    router.push({ name: "/user", params: { id: result.id } });
+  } catch (e: unknown) {
+    const error = e as ErrorRegister;
+    errors.value.email = error.email || "";
+    errors.value.password = error.password || "";
+  }
 };
 </script>
 
@@ -28,8 +47,11 @@ const onSubmit = () => {
         @change-input="changeInput"
         type="text"
         name="email"
+        :pattern="regexes.email"
         placeholder="Email"
         icon="material-symbols:mail"
+        title="Please enter a valid email"
+        :error="errors.email"
       />
       <Input
         @change-input="changeInput"
@@ -37,6 +59,7 @@ const onSubmit = () => {
         name="password"
         placeholder="Password"
         icon="material-symbols:lock"
+        :error="errors.email"
       />
       <Button text="Login" />
     </form>

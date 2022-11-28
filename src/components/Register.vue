@@ -9,21 +9,31 @@ const inputs = ref<{ email: string; password: string }>({
   password: "",
 });
 
+const errors = ref<ErrorRegister>({
+  email: "",
+  password: "",
+});
+
 const change = () => {
   emit("changeForm");
 };
 
 const changeInput = (inputName: "email" | "password", value: string) => {
   inputs.value[inputName] = value;
+  errors.value[inputName] = "";
 };
 
 const onSubmit = async () => {
-  console.log(inputs.value.email, inputs.value.password);
-  const result = await AuthApi.register({
-    email: inputs.value.email,
-    password: inputs.value.password
-  })
-  console.log(result)
+  try {
+    await AuthApi.register({
+      email: inputs.value.email,
+      password: inputs.value.password,
+    });
+  } catch (e: unknown) {
+    const error = e as ErrorRegister;
+    errors.value.email = error.email || "";
+    errors.value.password = error.password || "";
+  }
 };
 </script>
 
@@ -47,6 +57,7 @@ const onSubmit = async () => {
         placeholder="Email"
         icon="material-symbols:mail"
         title="Please enter a valid email"
+        :error="errors.email"
       />
       <Input
         @change-input="changeInput"
@@ -55,6 +66,7 @@ const onSubmit = async () => {
         placeholder="Password"
         icon="material-symbols:lock"
         title="Password must contain at least min 8 characters, 1 lowercase, 1 uppercase, 1 special character and 1 digit"
+        :error="errors.password"
       />
       <Button type="submit" text="Start coding now" />
     </form>
