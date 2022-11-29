@@ -2,6 +2,9 @@
 import { ref } from "vue";
 import AuthApi from "~/api/Auth.api";
 import { socialsConnect, regexes } from "~/constants";
+import Button from "./Button.vue";
+import ConnectLink from "./ConnectLink.vue";
+import Input from "./Input.vue";
 const emit = defineEmits(["changeForm"]);
 
 const inputs = ref<{ email: string; password: string }>({
@@ -15,6 +18,7 @@ const errors = ref<ErrorRegister>({
 });
 
 const change = () => {
+  console.log("here");
   emit("changeForm");
 };
 
@@ -29,6 +33,7 @@ const onSubmit = async () => {
       email: inputs.value.email,
       password: inputs.value.password,
     });
+    change();
   } catch (e: unknown) {
     const error = e as ErrorRegister;
     errors.value.email = error.email || "";

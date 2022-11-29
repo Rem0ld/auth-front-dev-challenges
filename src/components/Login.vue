@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import AuthApi from "~/api/Auth.api";
+import Input from "../components/Input.vue";
+import Button from "../components/Button.vue";
+import ErrorMessage from "../components/ErrorMessage.vue";
 import { regexes, socialsConnect } from "~/constants";
+import ConnectLink from "./ConnectLink.vue";
+
 const emit = defineEmits(["changeForm"]);
 const router = useRouter();
 
@@ -9,10 +14,7 @@ const inputs = ref<{ email: string; password: string }>({
   password: "",
 });
 
-const errors = ref<ErrorRegister>({
-  email: "",
-  password: "",
-});
+const error = ref<string>("");
 
 const change = () => {
   emit("changeForm");
@@ -28,13 +30,12 @@ const onSubmit = async () => {
       email: inputs.value.email,
       password: inputs.value.password,
     });
-    console.log(result);
 
-    router.push({ name: "/user", params: { id: result.id } });
+    router.push({ name: "Profile", params: { id: result.id } });
   } catch (e: unknown) {
-    const error = e as ErrorRegister;
-    errors.value.email = error.email || "";
-    errors.value.password = error.password || "";
+    const err = e as Error;
+
+    error.value = err.message;
   }
 };
 </script>
@@ -42,6 +43,7 @@ const onSubmit = async () => {
 <template>
   <div class="flex flex-col gap-y-8">
     <h2 text="left bold lg">Login</h2>
+    <ErrorMessage v-if="error" :error="error" />
     <form @submit.prevent="onSubmit" class="flex flex-col gap-3">
       <Input
         @change-input="changeInput"
@@ -51,7 +53,6 @@ const onSubmit = async () => {
         placeholder="Email"
         icon="material-symbols:mail"
         title="Please enter a valid email"
-        :error="errors.email"
       />
       <Input
         @change-input="changeInput"
@@ -59,7 +60,6 @@ const onSubmit = async () => {
         name="password"
         placeholder="Password"
         icon="material-symbols:lock"
-        :error="errors.email"
       />
       <Button text="Login" />
     </form>
@@ -78,10 +78,8 @@ const onSubmit = async () => {
       </div>
       <span class="text-sm text-gray-400"
         >Don't have an account yet?
-        <button @click="change" type="submit" color="blue-400">
-          Register
-        </button></span
-      >
+        <button @click="change" type="submit" color="blue-400">Register</button>
+      </span>
     </div>
   </div>
 </template>

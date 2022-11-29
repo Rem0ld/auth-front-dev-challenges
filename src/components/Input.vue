@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
-import { capFirstLetter } from "../utils/stringManipulation";
+import ErrorMessage from "./ErrorMessage.vue";
 
 withDefaults(
   defineProps<{
@@ -42,17 +42,5 @@ withDefaults(
       @input="(e: any) => $emit('changeInput', name, e.target.value)"
     />
   </div>
-  <Transition>
-    <div
-      v-if="error"
-      grid
-      place-items-center
-      bg="red-100"
-      rounded="5px"
-      mt="-3"
-      min-h="40px"
-    >
-      <span text="red-500">{{ capFirstLetter(error) }}</span>
-    </div>
-  </Transition>
+  <ErrorMessage v-if="error" :error="error" />
 </template>

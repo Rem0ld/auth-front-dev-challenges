@@ -3,11 +3,11 @@ import { ref } from "vue";
 import { Icon } from "@iconify/vue";
 import Register from "../../components/Register.vue";
 import Login from "../../components/Login.vue";
+import { isDark, toggleDark } from "../../composables/index";
 
-const isLoginForm = ref(false);
+const isLoginForm = ref(true);
 
 const changeForm = () => {
-  console.log("changing form");
   isLoginForm.value = !isLoginForm.value;
 };
 </script>

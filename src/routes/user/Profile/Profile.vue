@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+
 const props = defineProps<{ id: string }>();
 const router = useRouter();
 </script>
 
 <template>
   <div>
-    <div i-carbon-pedestrian text-4xl inline-block />
+    <div text-4xl inline-block />
     <p>Hi, {{ props.id }}</p>
     <p text-sm op50>
       <em>Dynamic route!</em>

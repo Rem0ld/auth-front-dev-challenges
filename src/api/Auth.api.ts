@@ -1,26 +1,21 @@
-import { baseUrl } from "../constants";
+import { BASE_URL, KEY_ACCESS_TOKEN } from "../constants";
+import BaseApi from "./Base.api";
 
-class AuthApi {
+class AuthApi extends BaseApi {
   url: string;
   routes: {
     register: string;
     login: string;
   };
-  headers: Headers;
 
-  constructor(private baseUrl: string) {
-    const lastCharacter = baseUrl[baseUrl.length - 1];
-    if (lastCharacter !== "/") {
-      baseUrl = baseUrl + "/";
-    }
+  constructor(baseUrl: string) {
+    super(baseUrl);
 
-    this.url = baseUrl + "api/auth";
+    this.url = this.baseUrl + "api/auth";
     this.routes = {
       register: "/register",
       login: "/login",
     };
-    this.headers = new Headers();
-    this.headers.append("Content-Type", "application/json; charset=utf-8");
   }
 
   async register(data: { email: string; password: string }) {
@@ -35,6 +30,7 @@ class AuthApi {
       if (!response.ok) {
         throw new Error(await response.json());
       }
+
       return response.json();
     } catch (e: unknown) {
       const error = e as Error;
@@ -60,20 +56,22 @@ class AuthApi {
         headers: this.headers,
         body: JSON.stringify(data),
       });
+      if (!response.ok) {
+        throw new Error(await response.json());
+      }
       const result = await response.json();
 
-      localStorage.setItem("access_token", result.token);
+      localStorage.setItem(KEY_ACCESS_TOKEN, result.accessToken);
 
       return result;
     } catch (error) {
-      console.error(error);
-      throw new Error(error as string);
+      throw error;
     }
   }
 
   async logout() {
     const url = this.url;
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem(KEY_ACCESS_TOKEN);
 
     try {
       this.headers.append("Authorization", `Bearer ${token}`);
@@ -82,12 +80,13 @@ class AuthApi {
         headers: this.headers,
       });
       const result = await response.json();
+      console.log(result);
 
-      localStorage.removeItem("access_token");
+      localStorage.removeItem(KEY_ACCESS_TOKEN);
     } catch (error) {
       console.error(error);
     }
   }
 }
 
-export default new AuthApi(baseUrl);
+export default new AuthApi(BASE_URL);

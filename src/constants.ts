@@ -1,4 +1,5 @@
-export const baseUrl = "http://localhost:3000";
+export const BASE_URL = "http://localhost:3000";
+export const KEY_ACCESS_TOKEN = "access_token";
 
 export const socialsConnect = [
   { name: "google", icon: "mdi:google", link: "https://google.com" },
