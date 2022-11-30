@@ -31,13 +31,13 @@ const router = createRouter({
 router.beforeEach(async to => {
   const token = localStorage.getItem(KEY_ACCESS_TOKEN) || "";
 
-  if ((!token || token.length === 0) && to.path !== "/") {
-    return { path: "/" };
+  if (token && token.length && to.name !== "Profile") {
+    const decoded: DecodedCredentials = jwtDecode(token);
+    return { name: "Profile", params: { id: decoded.id } };
   }
 
-  const decoded: DecodedCredentials = jwtDecode(token);
-  if (decoded.id && decoded.id.length && to.name !== "Profile") {
-    return { name: "Profile", params: { id: decoded.id } };
+  if ((!token || token.length === 0) && to.path !== "/") {
+    return { path: "/", params: {} };
   }
 });
 app.use(router);

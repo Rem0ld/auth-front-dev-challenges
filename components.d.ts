@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     ConnectLink: typeof import('./src/components/ConnectLink.vue')['default']
     ContainerAuth: typeof import("./src/pages/auth/ContainerAuth.vue")["default"]
     Counter: typeof import('./src/components/Counter.vue')['default']
+    Dropdown: typeof import('./src/components/Dropdown.vue')['default']
     ErrorMessage: typeof import('./src/components/ErrorMessage.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Input: typeof import('./src/components/Input.vue')['default']

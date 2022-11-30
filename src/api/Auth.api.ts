@@ -75,12 +75,10 @@ class AuthApi extends BaseApi {
 
     try {
       this.headers.append("Authorization", `Bearer ${token}`);
-      const response = await fetch(url, {
+      await fetch(url, {
         method: "DELETE",
         headers: this.headers,
       });
-      const result = await response.json();
-      console.log(result);
 
       localStorage.removeItem(KEY_ACCESS_TOKEN);
     } catch (error) {

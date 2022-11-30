@@ -14,13 +14,8 @@
     "strictNullChecks": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [
-      "vite/client",
-      "vite-plugin-pages/client"
-    ],
-    "typeRoots": [
-      "./src/"
-    ],
+    "types": ["vite/client"],
+    "typeRoots": ["./src/"],
     "paths": {
       "~/*": ["src/*"]
     }
